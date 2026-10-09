@@ -1,29 +1,82 @@
-# Bambu MCP
+# PrintPulse Bambu MCP
 
-A local MCP server for working with Bambu Lab printers. It combines printer status and camera access, local model preparation and slicing, and guarded print workflows for use from MCP-compatible assistants.
+PrintPulse brings a Bambu Lab printer into an MCP client running on the same Windows PC. The server reads printer status and camera frames, prepares and slices models with the local Bambu Studio install, checks a print before sending it, and monitors the job.
 
-This is a personal project and an evolving code sample. It is not a hosted service or a production print-farm platform.
+This is a local integration, not a hosted printer service. Printer access, model files, and slicing stay on your machine. Sending a print goes through Bambu's installed software and requires a fresh preflight, visual review, and explicit confirmation.
 
-## Requirements
+## What it can do
 
-- Windows with Python 3.12+ and `uv`
-- Bambu Studio installed locally for slicing
-- A Bambu Lab printer reachable from the same local network
+- List configured printers and read live job, temperature, layer, and AMS status.
+- Capture fresh frames from the printer camera.
+- Inspect model dimensions and orientation options; prepare and slice models in Bambu Studio.
+- Check the sliced job against printer, plate, nozzle, filament, and current machine status.
+- Require a recent passing check, camera review, and user confirmation before sending a print; confirm the job actually starts and monitor it.
+
+The checked-in printer profile demonstrates an X1 Carbon setup. The server also contains an H2C send path through Bambu Connect. Hardware and send-path behavior depend on the locally installed Bambu software and the printer/account setup.
+
+## What you need
+
+- Windows and Python 3.12 or newer
+- [`uv`](https://docs.astral.sh/uv/)
+- Bambu Studio installed locally (used for model preparation and slicing)
+- Bambu Connect installed for the authorized print-send flow
+- A supported Bambu Lab printer reachable from the PC
 - An MCP-compatible client
 
-Some optional print-submission paths depend on components installed by official Bambu software. Those vendor binaries and certificates are not redistributed in this repository. Cloud submission is experimental and depends on the local installation and account state.
+Some status and camera features use the printer's local network connection. Print submission depends on the official Bambu software installed on your PC; this repository does not bundle Bambu binaries, certificates, or account credentials. The cloud send path is experimental and can depend on Bambu's account and software state.
 
-## Local setup
+## Set up
 
-1. Clone this repository and install dependencies with `uv sync`.
-2. Copy `printers.example.json` to `printers.json` and replace the placeholder with your own printer's serial and local address if needed. `printers.json` is ignored by Git.
-3. Open the printer in Bambu Studio once so its local access code is available to the integration.
-4. Configure your MCP client to run `uv --directory <path-to-repository> run python server.py`.
+In PowerShell:
 
-Keep printer serials, access codes, cloud credentials, local addresses, print files, and logs out of commits. Review the available tools and safety behavior before connecting a printer; print actions affect physical hardware.
+```powershell
+git clone https://github.com/CheesyPoofs346/printpulse-bambu-mcp.git
+cd printpulse-bambu-mcp
+uv sync
+Copy-Item printers.example.json printers.json
+```
 
-## Project status
+Edit `printers.json` with your printer serial and model. Set its local IP if discovery does not find the printer. The file is ignored by Git. Open the printer in Bambu Studio and make sure Bambu Connect is installed before trying the send flow.
 
-This repository is shared as a public source project. Features and hardware paths are under active development; compatibility and cloud-print behavior have not been independently verified for every setup.
+Add the server to Claude Desktop's MCP configuration, replacing the path with the directory where you cloned the repository:
 
-There is no license file yet, so publication does not grant permission to reuse or redistribute the code.
+```json
+{
+  "mcpServers": {
+    "printpulse-bambu": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "C:\\path\\to\\printpulse-bambu-mcp",
+        "run",
+        "python",
+        "server.py"
+      ]
+    }
+  }
+}
+```
+
+Restart the MCP client after saving its configuration. Keep printer serials, access codes, local addresses, cloud credentials, models, and print files out of public commits. `printers.json`, generated jobs, and local secrets are excluded by `.gitignore`.
+
+## Safety and scope
+
+Print actions affect physical equipment. The server requires a fresh preflight and an explicit confirmation, refuses to send when it cannot establish the printer state, and verifies that the expected job starts. Review the current camera frame and slicer preview yourself before confirming a run. Follow Bambu's operating guidance and supervise the printer appropriately.
+
+This source is published without a license. All rights are reserved unless and until a license is added; public visibility alone does not grant reuse rights.
+
+## A real workflow
+
+These are project photos from the printer, model preparation, and slicer preview—not stock or generated imagery.
+
+![Bambu Lab printer camera during a real print](docs/assets/printpulse-printer-camera.webp)
+
+| Model preparation | Slicer toolpath preview |
+| --- | --- |
+| ![Two views of the prepared airframe model](docs/assets/printpulse-model-view.webp) | ![Sliced model and support toolpaths](docs/assets/printpulse-toolpath-view.webp) |
+
+## Links
+
+- [PrintPulse](https://dylank.tech/)
+- [Report an issue](https://github.com/CheesyPoofs346/printpulse-bambu-mcp/issues)
+- [Contact](mailto:dylan@dylank.tech)

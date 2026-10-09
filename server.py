@@ -41,7 +41,7 @@ BAMBU_CONNECT = Path(os.environ["LOCALAPPDATA"]) / "Programs" / "bambu-connect" 
 
 mcp = MCPServer(
     "bambu",
-    instructions=("Local Bambu Lab printer integration. Follow explicit user confirmation before starting, pausing, resuming, or stopping any physical print. Check the configured printer, loaded filament, plate, and live printer status before a print action. Inspect camera output and slicer previews when available. Fail closed when status or hardware state is uncertain."),,
+    instructions=("Local Bambu Lab printer integration. Follow explicit user confirmation before starting, pausing, resuming, or stopping any physical print. Check the configured printer, loaded filament, plate, and live printer status before a print action. Inspect camera output and slicer previews when available. Fail closed when status or hardware state is uncertain."),
 )
 
 
