@@ -1,0 +1,20 @@
+# Local printer config — never commit this file
+printers.json
+*.secret.json
+cloud_token.json
+cloudprint/studio_login.secret.json
+cloudprint/jobs/
+started_jobs.json
+*.log
+*.bak*
+.venv/
+__pycache__/
+*.py[cod]
+prints/
+models/
+*.3mf
+*.stl
+cloudprint/plugin_runner
+cloudprint/plugin/
+cloudprint/ca_bundle.pem
+.flat_profiles/

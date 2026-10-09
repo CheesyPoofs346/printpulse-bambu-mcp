@@ -1,0 +1,11 @@
+{
+  "printers": {
+    "printer-1": {
+      "serial": "YOUR_PRINTER_SERIAL",
+      "model": "x1c",
+      "ip": null,
+      "usual_filament_types": ["PLA"]
+    }
+  },
+  "extra_subnets": []
+}

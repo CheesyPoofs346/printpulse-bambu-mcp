@@ -1,0 +1,11 @@
+[project]
+name = "bambu-mcp"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "bambu-lab-cloud-api>=1.0.5",
+    "mcp>=1.10",
+    "numpy>=2.5.3",
+    "paho-mqtt>=2.0",
+    "uiautomation>=2.0.29",
+]
